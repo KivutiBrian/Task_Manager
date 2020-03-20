@@ -17,7 +17,7 @@
       <!-- <v-btn text rounded v-for="(link,index) in links" :key="index" :to="link.url">{{ link.label }}</v-btn> -->
       <v-btn rounded text to="/">Home</v-btn>
       <v-btn rounded text :to="{ name:'About' }">About</v-btn>
-      <v-btn rounded text :to="{ name:'Tasks' }">Tasks</v-btn>
+      <v-btn v-if="loggedIn" rounded text :to="{ name:'Tasks' }">Tasks</v-btn>
       <v-btn v-if="!loggedIn" rounded text :to="{ name:'Login' }">Login</v-btn>
       <v-btn v-if="!loggedIn" rounded text :to="{ name:'Register' }">Register</v-btn>
       <v-btn v-if="loggedIn" rounded text  @click="logout">Logout</v-btn>
@@ -88,7 +88,8 @@ export default {
   },
   methods:{
     logout(){
-      alert("Logged out")
+      this.$store.dispatch("DESTROY_TOKEN")
+      .then(()=>this.$router.push({ name:'Login' }))
     }
   }
 }
