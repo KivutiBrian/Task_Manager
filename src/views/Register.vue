@@ -6,13 +6,13 @@
           <v-card width="400"  class="mx-auto">
             <v-card-title class="mx-auto">Create an account</v-card-title>
             <v-card-text>
-              <v-form>
-                <v-text-field :rules="usernameRules" v-model="username" label="Username" ></v-text-field>
-                <v-text-field :rules="fnameRules" v-model="fname" label="First Name" ></v-text-field>
-                <v-text-field :rules="lnameRules" v-model="lname" label="Last Name" ></v-text-field>
-                <v-text-field :rules="emailRules" v-model="email" label="Email" ></v-text-field>
+              <v-form ref="form" @submit.prevent="validate" v-model="valid">
+                <v-text-field :rules="usernameRules" v-model="username" label="Username" clearable></v-text-field>
+                <v-text-field :rules="fnameRules" v-model="fname" label="First Name" clearable></v-text-field>
+                <v-text-field :rules="lnameRules" v-model="lname" label="Last Name" clearable></v-text-field>
+                <v-text-field :rules="emailRules" v-model="email" label="Email" clearable></v-text-field>
                 <v-text-field type="password" :rules="passwordRules" v-model="password" label="Password" ></v-text-field>
-                <v-btn block type="submit" color="success" dark>Register</v-btn>
+                <v-btn  block type="submit" color="success" dark>Register</v-btn>
               </v-form>
             </v-card-text>
             
@@ -28,6 +28,7 @@ export default {
   name:'Register',
   data(){
     return{
+      valid:true,
       username:'',
       fname:'',
       lname:'',
@@ -52,13 +53,30 @@ export default {
       ],
       passwordRules:[
         value => !!value || 'password is required',
-        value => (value || '').match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/) ||
-          'Password must contain an upper case letter, a numeric character, and a special character',
+        value => value.length >= 8 || 'Min 8 characters',
+        // value => (value || '').match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/) ||'Password must contain an upper case letter, a numeric character, and a special character',
 
       ],
       
 
     }
+  },
+  methods:{
+    validate () {
+      let valid = this.$refs.form.validate()
+      if(valid){
+        this.$store.dispatch("REGISTER_USER",{
+          username: this.username,
+          firstName: this.fname,
+          lastName:this.lname,
+          email:this.email,
+          password: this.password
+        }).then(()=>{
+          this.$router.push({name:'Tasks'})
+        })
+      }
+      console.log(valid)
+    },
   }
 
 }

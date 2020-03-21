@@ -23,7 +23,7 @@
         <v-card-actions>
           <v-btn @click="login" color="success">Submit</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="info">Register</v-btn>
+          <v-btn :to="{ name:'Register' }" color="info">Register</v-btn>
         </v-card-actions>
     </v-card>
 </template>
