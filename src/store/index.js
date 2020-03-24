@@ -6,18 +6,24 @@ Vue.use(Vuex,axios)
 
 export default new Vuex.Store({
   state: {
-    token: localStorage.getItem("token") ||null
+    token: localStorage.getItem("token") ||null,
+    tasks:[]
 
   },
   mutations: {
     SET_TOKEN(state,token){
       state.token = token
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`
     },
 
     CLEAR_TOKEN(state){
       state.token = null
       axios.defaults.headers.common['Authorization'] = null
+      state.tasks = null
+    },
+
+    SET_TASKS(state,payload){
+      state.tasks = payload
     }
 
   },
@@ -76,8 +82,18 @@ export default new Vuex.Store({
           rej()
         }
       })
-      
+    },
 
+    // get tasks
+    GET_TASKS(context){
+      axios.defaults.headers.common['Authorization'] = `Bearer ${context.state.token}`
+
+      axios.get('http://localhost:5000/tasks')
+        .then(response=>{
+          console.log(response.data)
+          context.commit('SET_TASKS',response.data.tasks)
+        })
+        .catch(error=>console.log(error))
     }
 
   },

@@ -30,17 +30,16 @@
           </v-col>
         </v-row>
         <v-row :align="alignment" :justify="justify" >
-          <v-col>
+          <v-col v-for="(task,index) in $store.state.tasks" :key="index">
             <v-card max-width="344" class="mx-auto">
               <v-card-text>
                 <p class="display-1 text--primary">
-                  be•nev•o•lent
+                  {{ task.task }}
                 </p>
                 <div class="text--primary mb-3">
-                  well meaning and kindly.<br>
-                  "a benevolent smile"
+                  {{ task.description }}
                 </div>
-                <p class="text--primary date" >21/03/2020</p>
+                <p class="text--primary date" >created on:{{ task.created_at.substring(0, 10) }}</p>
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions>
@@ -57,6 +56,7 @@
 </template>
 
 <script>
+
 export default {
   name:'Tasks',
   data(){
@@ -67,8 +67,12 @@ export default {
       alignment: 'center',
       justify:'center'
     }
-  }
-
+  },
+  mounted(){
+    this.$store.dispatch('GET_TASKS')
+  },
+  
+  
 }
 </script>
 
