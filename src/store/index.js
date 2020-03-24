@@ -12,10 +12,12 @@ export default new Vuex.Store({
   mutations: {
     SET_TOKEN(state,token){
       state.token = token
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     },
 
     CLEAR_TOKEN(state){
       state.token = null
+      axios.defaults.headers.common['Authorization'] = null
     }
 
   },
@@ -62,6 +64,7 @@ export default new Vuex.Store({
       })  
     },
 
+    // logout
     DESTROY_TOKEN(context){
       return new Promise((res,rej)=>{
         // destroy token only if we are logged in
