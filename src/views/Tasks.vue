@@ -12,16 +12,17 @@
                 <v-card>
                   <v-card-title>Add task</v-card-title>
                   <v-card-text>
-                    <v-form>
-                      <v-text-field v-model="title" label="title"></v-text-field>
+                    <v-form @submit.prevent="submitTask" ref="form" v-model="valid">
+                      <v-text-field v-model="title" label="title" :rules="titleRules"></v-text-field>
                       <v-textarea
                         v-model="description"
                         filled
                         label="description"
                         rows="2"
                         row-height="20"
+                        :rules="descriptionRules"
                       ></v-textarea>
-                      <v-btn color="success">Submit</v-btn>
+                      <v-btn :disabled="!valid" type="submit" color="success">Submit</v-btn>
                     </v-form>
                   </v-card-text>
                 </v-card>
@@ -30,7 +31,7 @@
           </v-col>
         </v-row>
         <v-row :align="alignment" :justify="justify" >
-          <v-col v-for="(task,index) in $store.state.tasks" :key="index">
+          <v-col v-for="(task,index) in $store.state.tasks" :key="index" class="col-12 col-lg-5 col-sm-6 col-md-8">
             <v-card max-width="344" class="mx-auto">
               <v-card-text>
                 <p class="display-1 text--primary">
@@ -61,16 +62,37 @@ export default {
   name:'Tasks',
   data(){
     return{
+      valid: true,
       dialog:false,
       title:'',
       description:'',
       alignment: 'center',
-      justify:'center'
+      justify:'center',
+      titleRules:[
+        value => !!value || 'Password is required'
+      ],
+      descriptionRules:[
+        value => !!value || 'Password is required'
+      ]
     }
   },
   mounted(){
     this.$store.dispatch('GET_TASKS')
   },
+  methods:{
+    submitTask(){
+      this.$store.dispatch('ADD_TASK',{
+        task:this.title,
+        description:this.description
+      }).then(()=>{
+        this.title = '',
+        this.description = ''
+        this.dialog = false //close the dialog
+      }).catch(()=>{
+        console.log('something went wrong')
+      })
+    }
+  }
   
   
 }

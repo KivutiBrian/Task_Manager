@@ -1,11 +1,16 @@
 <template>
-    <v-card width="400" class="mx-auto mt-5">
-        <v-card-title>
+    <div>
+      <v-card width="400" class="mx-auto mt-5">
+        <v-alert type="error" class="mb-4" v-if="errorMessage">
+          {{ errorMessage }}
+        </v-alert>
+
+        <v-card-title class="mt-5">
           <h1 class="display-1">Login</h1>
         </v-card-title>
 
         <v-card-text>
-          <v-form >
+          <v-form ref="form" v-model="valid">
             <v-text-field v-model="email" :rules="emailRules" label="email" prepend-icon="mdi-account-circle"></v-text-field>
             <v-text-field
             v-model="password" 
@@ -21,11 +26,19 @@
         <v-divider></v-divider>
 
         <v-card-actions>
-          <v-btn @click="login" color="success">Submit</v-btn>
+          <v-progress-linear
+            :active="$store.state.loading"
+            :indeterminate="$store.state.loading"
+            absolute
+            bottom
+            color="deep-purple accent-4"
+          ></v-progress-linear>
+          <v-btn :disabled="!valid" @click="login" color="success">Submit</v-btn>
           <v-spacer></v-spacer>
           <v-btn :to="{ name:'Register' }" color="info">Register</v-btn>
         </v-card-actions>
     </v-card>
+    </div>
 </template>
 
 <script>
@@ -34,8 +47,10 @@ export default {
     data(){
         return{
             showPassword:false,
+            valid:true,
             email:'',
             password:'',
+            errorMessage:'',
             emailRules:[
                 value => !!value || 'Email is required',
                 value => value.indexOf('@') !== 0 || 'Email should have a username',
@@ -56,6 +71,8 @@ export default {
           password:this.password
         }).then(()=>{
           this.$router.push({name:'Tasks'})
+        }).catch(error=>{
+          this.errorMessage = error.response.data.message
         })
       }
     }

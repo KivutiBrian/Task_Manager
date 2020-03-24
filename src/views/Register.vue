@@ -6,13 +6,13 @@
           <v-card width="400"  class="mx-auto">
             <v-card-title class="mx-auto">Create an account</v-card-title>
             <v-card-text>
-              <v-form ref="form" @submit.prevent="validate" v-model="valid">
+              <v-form @submit.prevent="validate" ref="form" v-model="valid">
                 <v-text-field :rules="usernameRules" v-model="username" label="Username" clearable></v-text-field>
                 <v-text-field :rules="fnameRules" v-model="fname" label="First Name" clearable></v-text-field>
                 <v-text-field :rules="lnameRules" v-model="lname" label="Last Name" clearable></v-text-field>
                 <v-text-field :rules="emailRules" v-model="email" label="Email" clearable></v-text-field>
                 <v-text-field type="password" :rules="passwordRules" v-model="password" label="Password" ></v-text-field>
-                <v-btn  block type="submit" color="success" dark>Register</v-btn>
+                <v-btn block type="submit" color="success" dark>Register</v-btn>
               </v-form>
             </v-card-text>
             
@@ -75,7 +75,7 @@ export default {
           this.$router.push({name:'Tasks'})
         })
       }
-      console.log(valid)
+      // console.log(valid)
     },
   }
 
