@@ -80,15 +80,18 @@ export default {
     this.$store.dispatch('GET_TASKS')
   },
   methods:{
+    // add a new task
     submitTask(){
       this.$store.dispatch('ADD_TASK',{
         task:this.title,
         description:this.description
       }).then(()=>{
+        // when the promise has been resolved
         this.title = '',
         this.description = ''
         this.dialog = false //close the dialog
       }).catch(()=>{
+        // when the promise is unresolved
         console.log('something went wrong')
       })
     }
