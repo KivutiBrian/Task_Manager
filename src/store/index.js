@@ -11,17 +11,20 @@ export default new Vuex.Store({
     loading:false
   },
   mutations: {
+    // set the toke
     SET_TOKEN(state,token){
       state.token = token
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     },
 
+    // clear the token
     CLEAR_TOKEN(state){
       state.token = null
       axios.defaults.headers.common['Authorization'] = null
       state.tasks = null
     },
 
+    // set the loading status
     SET_LOADING_STATUS(state,payload){
       state.loading = payload
     },
@@ -58,6 +61,7 @@ export default new Vuex.Store({
         })
       })
     },
+
 
     // login a user
     RETRIEVE_TOKEN(context,payload){
